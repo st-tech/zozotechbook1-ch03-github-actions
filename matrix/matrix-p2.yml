@@ -1,0 +1,30 @@
+name: Matrix Build Pattern 2
+on:
+  push:
+    branches:
+      - test-matrix
+jobs:
+  build:
+    strategy:
+      matrix:
+        cfg:
+        - { os: ubuntu-latest, name: GNU,    cc: gcc,   cpp: g++,     platform: x32 }
+        - { os: ubuntu-latest, name: GNU,    cc: gcc,   cpp: g++,     platform: x64 }
+        - { os: ubuntu-latest, name: Clang,  cc: clang, cpp: clang++, platform: x32 }
+        - { os: ubuntu-latest, name: Clang,  cc: clang, cpp: clang++, platform: x64 }
+        - { os: windows-2016,  name: VS2017, cc: cl,    cpp: cl,      platform: x32 }
+        - { os: windows-2016,  name: VS2017, cc: cl,    cpp: cl,      platform: x64 }
+        - { os: windows-2019,  name: VS2019, cc: cl,    cpp: cl,      platform: x32 }
+        - { os: windows-2019,  name: VS2019, cc: cl,    cpp: cl,      platform: x64 }
+    runs-on: ${{ matrix.cfg.os }}
+    steps:
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+      - name: Build Project
+        run: |
+          echo "Build on ${{ matrix.cfg.os }}-${{ matrix.cfg.platform }}"
+          echo "name: ${{ matrix.cfg.name }}"
+          echo "cc: ${{ matrix.cfg.cc }}"
+          echo "cpp: ${{ matrix.cfg.cpp }}"

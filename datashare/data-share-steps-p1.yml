@@ -1,0 +1,21 @@
+name: Data Share Between Multi-Steps Pattern 1
+on:
+  push:
+    branches:
+      - test-data-share
+
+jobs:
+  my_job:
+    name: Data Share Between Multi-Steps using file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump Env Variables
+        run: |
+          echo "HOME: ${HOME}"
+          echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+      - name: Write Data in a Job
+        run: echo "Hello!!" > ${GITHUB_WORKSPACE}/myoutput.txt
+      - name: Read Data in a Job
+        run: |
+          value=$(cat ${GITHUB_WORKSPACE}/myoutput.txt)
+          echo "Read Data: ${value}"

@@ -1,0 +1,33 @@
+name: Data Share Between Multi-Jobs
+on:
+  push:
+    branches:
+      - test-data-share
+
+jobs:
+  first_job:
+    name: First Job
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |
+          echo "First Job Success!!" > first-job.txt
+      - name: Upload First Job Output
+        uses: actions/upload-artifact@v1
+        with:
+          name: job-output
+          path: first-job.txt
+
+  second_job:
+    name: Second Job
+    needs: first_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download First Job Output
+        uses: actions/download-artifact@v1
+        with:
+          name: job-output
+      - shell: bash
+        run: |
+          value=$(cat job-output/first-job.txt)
+          echo "First Job Output: ${value}"

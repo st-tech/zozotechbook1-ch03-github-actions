@@ -1,0 +1,69 @@
+name: Postgres Service Container
+# Source from https://github.com/actions/example-services
+on:
+  push:
+    branches:
+      - test-service-container
+
+jobs:
+  # 全てのStepをコンテナー内で実行
+  container-job:
+    runs-on: ubuntu-latest
+
+    container:
+      image:  node:10.16-jessie
+
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        # ポートマッピング
+        - 5432:5432
+        # ヘルスチェック
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v1     
+    - run: npm ci
+      working-directory: ./postgres
+    - run: node client.js
+      working-directory: ./postgres
+      env:
+        # 全てコンテナ内で実行する場合はコンテナネットワークでの実行なので
+        # サービス名を指定してアクセスする。ここではpostgres
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+
+  # 全てのStepを仮想マシン上で実行
+  vm-job:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        # <コンテナのポートを指定しない場合>
+        # コンテナのポートは空いているポートにランダムに割り当てられる
+        - 5432/tcp
+        # ヘルスチェック
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v1     
+    - run: npm ci
+      working-directory: ./postgres
+    - run: node client.js
+      working-directory: ./postgres
+      env:
+        # VM上での実行の場合、サービスコンテナは、ホストのポートバインディング
+        # を使用するためlocalhostを介してアクセスします
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }} 

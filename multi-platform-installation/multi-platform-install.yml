@@ -1,0 +1,19 @@
+name: Install Httping on Mult-Platform
+#on: push
+on:
+  push:
+    branches:
+      - test-multi-platform-installation
+jobs:
+  linux_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install httping
+  windows_job:
+    runs-on: windows-latest
+    steps:
+      - run: choco install httping
+  macos_job:
+    runs-on: macos-latest
+    steps:
+      - run: brew install httping

@@ -1,0 +1,23 @@
+name: Install only if cache not hit
+# Source from https://github.com/actions/cache
+on:
+  push:
+    branches:
+      - test-cache
+
+jobs:
+  install:
+    name: Installation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: path/to/dependencies
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: /install.sh

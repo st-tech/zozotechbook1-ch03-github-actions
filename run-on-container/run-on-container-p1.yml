@@ -1,0 +1,12 @@
+name: Run on Container Pattern 1
+on:
+  push:
+    branches:
+      - test-run-on-container
+jobs:
+  build:
+    name: Build on centos:6
+    runs-on: ubuntu-latest
+    container: centos:6
+    steps:
+      - run: cat /etc/*release

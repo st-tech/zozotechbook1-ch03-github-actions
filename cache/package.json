@@ -1,0 +1,28 @@
+{
+  "name": "test-github-action-node-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.0",
+    "should": "^11.1.1",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yokawasa/test-github-action-node-sample.git"
+  },
+  "homepage": "https://github.com/yokawasa/test-github-action-node-sample",
+  "author": "Yoichi Kawasaki",
+  "license": "Zero"
+}

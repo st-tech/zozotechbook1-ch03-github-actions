@@ -1,0 +1,37 @@
+name: ChatOps Sample to assign user to an issue
+on:
+  issues:
+    types: [opened, edited]
+jobs:
+  chatops-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump the full event webhook payload.
+        env:
+          GITHUB_CONTEXT_EVENT: ${{ toJson(github.event) }}
+          GITHUB_CONTEXT_EVENT_ISSUE: ${{ toJson(github.event.issue) }}
+        run: |
+          echo "GITHUB_CONTEXT_EVENT ${GITHUB_CONTEXT_EVENT}"
+          echo "GITHUB_CONTEXT_EVENT_ISSUE ${GITHUB_CONTEXT_EVENT_ISSUE}"
+      - name: Get assignee from issue body
+        id: get-assignee
+        run: |
+          echo "The issue body was: $(jq --raw-output .issue.body '${{ github.event_path }}')"
+          issue_body=$(jq --raw-output .issue.body '${{ github.event_path }}')
+          assignee=$(echo $issue_body \
+            | awk 'match($0, /\/assign @[A-z\d-]{0,38}/) {print substr($0, RSTART, RLENGTH)}' \
+            | awk '{name=substr( $2, index( $2, "@") + 1);print name}' )
+          echo ::set-output name=assignee::$assignee
+        if: contains(github.event.issue.body, '/assign')
+      - name: ChatOps to assign user to the issue
+        uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.addAssignees({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              assignees: ['${{steps.get-assignee.outputs.assignee}}']
+            })
+        if: steps.get-assignee.outputs.assignee != ''

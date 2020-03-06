@@ -1,0 +1,27 @@
+name: GitHub Script - Comment on an issue
+# Source from https://github.com/actions/github-script
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"     
+      - name: Comment on an issue
+        uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const commentBody = `Hi @${context.actor}! Thanks for the feedback! We'll assign the issue to the content author to evaluate and update as appropriate.`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            })

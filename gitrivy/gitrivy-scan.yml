@@ -1,0 +1,26 @@
+name: Vulnerability Scan
+# https://github.com/homoluctus/gitrivy
+on:
+  #schedule:
+  #  - cron: '0 9 * * *'
+  push:
+    branches:
+      - test-gitrivy-scan
+
+jobs:
+ gitrivy_scan:
+    name: Vulnerability Scan with Gitrivy
+    runs-on: ubuntu-18.04
+    env:
+      IMAGE_NAME: python:3.4-alpine
+    steps:
+      - name: Pull docker image
+        run: docker pull ${IMAGE_NAME}
+      - uses: homoluctus/gitrivy@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ## DO NOT give `image` param if you set IMAGE_NAME env 
+          ## as gitrivy doesn't use "IMAGE_NAME" environment variable if 
+          ## `image` param is configured
+          # image: ${IMAGE_NAME} 
+          issue: 'true'

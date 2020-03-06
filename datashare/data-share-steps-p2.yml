@@ -1,0 +1,13 @@
+name: Data Share Between Multi-Steps Pattern 2
+on:
+  push:
+    branches:
+      - test-data-share
+
+jobs:
+  my_job:
+    name: Data Share Between Multi-Steps using set-env
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "::set-env name=TEST_VAR::Hello"
+      - run: echo "TEST_VAR ${TEST_VAR}"
