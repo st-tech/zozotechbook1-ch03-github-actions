@@ -1,4 +1,5 @@
-# ZOZOTECHBOOK1-CH03: GitHub Actions Samples
+## 第3章「速習GitHub Actions」サンプルコード
+このrepositoryは[技術書典 応援祭](https://techbookfest.org/market)で頒布された「ZOZO TECH BOOK VOL.1」の第3章「速習GitHub Actions 〜 明日からの充実GitHub自動化ライフのための凝縮ポイント」のサンプルコードです。
 
 | サンプル | ソース  |
 | ---- | ---- |
@@ -23,3 +24,5 @@
 |  カスタムアクション - JavaScript |  [repository](https://github.com/actions/javascript-action)  |
 |  カスタムアクション - コンテナー |  [repository]( https://github.com/actions/container-action)  |
 
+## ZOZO TECH BOOK VOL.1について
+「ZOZO TECH BOOK VOL.1」はZOZOテクノロジーズ (ZOZO Technologies, Inc.) の有志が集まり、今回初の試みとして制作した技術同人誌です。
