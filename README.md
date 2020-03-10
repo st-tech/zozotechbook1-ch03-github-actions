@@ -1,4 +1,4 @@
-## 第3章「速習GitHub Actions」サンプルコード
+## 第3章「速習GitHub Actions 〜 明日からの充実GitHub自動化ライフのための凝縮ポイント」サンプルコード
 このrepositoryは[技術書典 応援祭](https://techbookfest.org/market)で頒布された「ZOZO TECH BOOK VOL.1」の第3章「速習GitHub Actions 〜 明日からの充実GitHub自動化ライフのための凝縮ポイント」のサンプルコードです。
 
 | サンプル | ソース  |
